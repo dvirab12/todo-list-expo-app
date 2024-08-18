@@ -10,7 +10,7 @@ export default function App() {
   return (
     <View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Todo List!</Text>
+        <Text style={styles.title}>Todo tist!</Text>
       </View>
      <ScrollView>
       {tasks.map(task => (
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 30
+    marginTop: 40,
+    marginBottom: 20,
   }
 });

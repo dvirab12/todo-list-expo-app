@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import TaskCheck from './TaskCheck'
+
 function Task({task}){
     return (
         <View style={styles.taskContainer}>
-            <Text style={styles.taskText}>{task}</Text>
+            <TaskCheck isChecked={true} />
+            <Text style={[styles.taskText, styles.taskTitleText]}>{task}</Text>
         </View>
     );
 }
@@ -12,14 +15,20 @@ function Task({task}){
 
 const styles = StyleSheet.create({
   taskContainer: {
+    flexDirection: 'row',
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#f2f9dc',
+    backgroundColor: '#a2d15c',
     borderColor: '#dbe7b5',
-    borderWidth: 1,
+    borderWidth: 6,
+    marginHorizontal: 10
   },
   taskText: {
     fontSize: 18,
+    marginLeft: 20
+  },
+  taskTitleText: {
+    fontWeight: 'bold'
   }
 });
 
