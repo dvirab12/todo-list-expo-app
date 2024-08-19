@@ -1,14 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import Task from './components/Task/Task';
+import NewTask from './components/NewTask/NewTask';
 
 export default function App() {
   const [tasks, setTasks] = useState(
     [{id: 1, text: "I am a task"}]
   );
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Todo tist!</Text>
       </View>
@@ -16,16 +17,15 @@ export default function App() {
       {tasks.map(task => (
         <Task task={task.text} key={task.id} />
       ))}
-    </ScrollView>
-    </View>
+      </ScrollView>
+      <NewTask />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     fontSize: 30,
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   titleContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
     marginBottom: 20,
   }
 });
