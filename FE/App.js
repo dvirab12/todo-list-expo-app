@@ -16,7 +16,7 @@ export default function App() {
      <ScrollView>
       {tasks.map(task => (
         <Task task={task.text} key={task.id} />
-      ))}
+      ))} 
       </ScrollView>
       <NewTask />
     </SafeAreaView>
