@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
-import TaskCheck from './TaskCheck'
-
+import TaskCheck from './TaskCheck';
+import ButtonTask from './ButtonTask';
 function Task({task}){
     return (
         <View style={styles.taskContainer}>
             <TaskCheck isChecked={true} />
-            <Text style={[styles.taskText, styles.taskTitleText]}>{task}</Text>
+            <Text style={[styles.taskText, styles.taskTitleText]}>
+              {task}
+            </Text>
+            <ButtonTask title='hi'/>
         </View>
     );
 }
@@ -16,6 +19,7 @@ function Task({task}){
 const styles = StyleSheet.create({
   taskContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 15,
     borderRadius: 10,
     backgroundColor: '#a2d15c',
@@ -25,7 +29,8 @@ const styles = StyleSheet.create({
   },
   taskText: {
     fontSize: 18,
-    marginLeft: 20
+    marginLeft: 20,
+    flex: 1
   },
   taskTitleText: {
     fontWeight: 'bold'
