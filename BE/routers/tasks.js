@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    const taskId = req.params.id;
-    const task = Tasks.find(tasks => tasks.id === id);
+    const taskId = parseInt(req.params.id);
+    const task = tasks.find(tasks => tasks.id === taskId);
 
     if (task) {
         res.status(200).json(task);
@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
     }
 
     const newTask = {
-        id: tasks.lengyh + 1,
+        id: tasks.length + 1,
         title: title,
         description: description || ""
     }
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     const taskID = req.params.id;
-    const task = Tasks.find(tasks => tasks.id === id);
+    const task = tasks.find(tasks => tasks.id === taskId);
 
     if (task) {
         tasks.splice(taskID - 1, 1)
