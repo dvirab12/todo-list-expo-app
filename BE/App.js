@@ -1,8 +1,12 @@
 const express = require('express');
+
 const app = express();
 const port = 3000;  
 
+const tasksRouter = require("./routers/tasks")
+
 app.use(express.json());
+app.use('/tasks', tasksRouter);
 
 const users = [{username: "admin", password: "admin"}]
 
