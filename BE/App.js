@@ -4,18 +4,17 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 3000;  
 
-const tasksRouter = require("./routers/tasks")
+const tasksRouter = require("./routers/Tasks")
 
 app.use(express.json());
 app.use('/tasks', tasksRouter);
 
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb://localhost:27017/todo_list";
+const mongoDB = "mongodb://localhost:27017/todoDB";
 
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(mongoDB);
-}
+mongoose.connect(mongoDB)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Could not connect to MongoDB...', err));
 
 const users = [{username: "admin", password: "admin"}]
 

@@ -5,18 +5,32 @@ const Task = require('../models/Task')
 
 tasks = []
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const tasks = await Task.find();
+    console.log(tasks);
     res.json(tasks);
 })
 
-router.get('/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = tasks.find(tasks => tasks.id === taskId);
+router.post ('/:id', async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
 
-    if (task) {
-        res.status(200).json(task);
-    } else {
-        res.status(401).json({message: "taskID not found!"});
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(id, updates, {
+            new: true,
+            runValidators: true
+        })
+
+        if (!updatedTask) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        return res.status(200).json({
+            message: "Task updated successfully",
+            task: updatedTask
+        });
+    } catch (err) {
+        return res.status(400).json({ message: err.message });
     }
 })
 
@@ -40,15 +54,19 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id', (req, res) => {
-    const taskID = req.params.id;
-    const task = tasks.find(tasks => tasks.id === taskId);
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
 
-    if (task) {
-        tasks.splice(taskID - 1, 1)
-        res.status(200).json({message: `Deleted task ${taskID}`});
-    } else {
-        res.status(401).json({message: "taskID not found!"});
+    try {
+        const deletedTask = await Task.findByIdAndDelete(id);
+
+        if (!deletedTask) {
+            return res.status(401).json({message: "Task not found"});
+        }
+        
+        return res.status(200).json(deletedTask);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
 })
 
