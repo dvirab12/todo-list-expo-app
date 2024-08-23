@@ -5,18 +5,27 @@ const Task = require('../models/Task')
 
 tasks = []
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const tasks = await Task.find();
+    console.log(tasks);
     res.json(tasks);
 })
 
-router.get('/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = tasks.find(tasks => tasks.id === taskId);
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
 
-    if (task) {
-        res.status(200).json(task);
-    } else {
-        res.status(401).json({message: "taskID not found!"});
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(id, updates, {
+            new: true,
+            runValidators: true
+        })
+
+        if (!updatedTask) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
 })
 
