@@ -11,7 +11,11 @@ router.get('/', async (req, res) => {
     res.json(tasks);
 })
 
+<<<<<<< HEAD
 router.post ('/:id', async (req, res) => {
+=======
+router.get('/:id', async (req, res) => {
+>>>>>>> 26aeb9d5ae1f73ce4b0e097f0d7a0c6d493cd27b
     const { id } = req.params;
     const updates = req.body;
 
@@ -24,6 +28,7 @@ router.post ('/:id', async (req, res) => {
         if (!updatedTask) {
             return res.status(404).json({ message: "Task not found" });
         }
+<<<<<<< HEAD
 
         return res.status(200).json({
             message: "Task updated successfully",
@@ -31,6 +36,10 @@ router.post ('/:id', async (req, res) => {
         });
     } catch (err) {
         return res.status(400).json({ message: err.message });
+=======
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+>>>>>>> 26aeb9d5ae1f73ce4b0e097f0d7a0c6d493cd27b
     }
 })
 
