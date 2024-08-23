@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const app = express();
 const port = 3000;  
@@ -7,6 +8,14 @@ const tasksRouter = require("./routers/tasks")
 
 app.use(express.json());
 app.use('/tasks', tasksRouter);
+
+mongoose.set("strictQuery", false);
+const mongoDB = "mongodb://localhost:27017/todo_list";
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
 
 const users = [{username: "admin", password: "admin"}]
 

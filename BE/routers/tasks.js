@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Task = require('../models/Task')
+
 tasks = []
 
 router.get('/', (req, res) => {
@@ -18,21 +20,24 @@ router.get('/:id', (req, res) => {
     }
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const {title, description} = req.body;
 
     if (!title) {
         return res.status(400).send("ERROR: Title is required!")
     }
 
-    const newTask = {
-        id: tasks.length + 1,
+    const task = new  Task({
         title: title,
         description: description || ""
-    }
+    });
 
-    tasks.push(newTask);
-    res.status(201).send("Added new task!");
+    try {
+        const newTask = await task.save();
+        res.status(201).json(newTask);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
 })
 
 router.delete('/:id', (req, res) => {
