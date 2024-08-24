@@ -4,12 +4,18 @@ import { View, Text, StyleSheet } from 'react-native';
 import TaskCheck from './TaskCheck';
 import ButtonTask from './ButtonTask';
 
-function Task({ task }) {
+import { deleteTaskById } from '../../services/tasksService';
+
+function Task({ task, onTaskDelete }) {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleCheckPress = () => {
         setIsChecked(!isChecked);
     };
+
+    const handleDeleteClick = () => {   
+        onTaskDelete(task._id);
+    }
 
     return (
         <View style={styles.taskContainer}>
@@ -17,7 +23,7 @@ function Task({ task }) {
             <Text style={styles.taskText}>{task}</Text>
             <View style={styles.buttonGroup}>
                 <ButtonTask title="Edit" color="#4CAF50" />
-                <ButtonTask title="Delete" color="#f44336" />
+                <ButtonTask title="Delete" onPress={handleDeleteClick} color="#f44336" />
             </View>
         </View>
     );

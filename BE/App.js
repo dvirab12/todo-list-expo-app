@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 
 const app = express();
 const port = 3000;  
@@ -8,6 +9,7 @@ const tasksRouter = require("./routers/Tasks")
 
 app.use(express.json());
 app.use('/tasks', tasksRouter);
+app.use(cors());
 
 mongoose.set("strictQuery", false);
 const mongoDB = "mongodb://localhost:27017/todoDB";
