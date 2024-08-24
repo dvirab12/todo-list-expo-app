@@ -1,10 +1,10 @@
 import React from "react"
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 
-function NewTask(){
+function NewTaskButton(onPress){
     return(
         <View>
-            <TouchableOpacity style={[styles.Button, styles.BoxShadow]}>
+            <TouchableOpacity style={[styles.Button, styles.BoxShadow]} onPress={onPress}>
                 <Text style={[styles.ButtonText, styles.BoxShadow]}>+</Text>
             </TouchableOpacity>
         </View>
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NewTask;
+export default NewTaskButton;

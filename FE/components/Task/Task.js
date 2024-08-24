@@ -4,9 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import TaskCheck from './TaskCheck';
 import ButtonTask from './ButtonTask';
 
-import { deleteTaskById } from '../../services/tasksService';
-
-function Task({ task, onTaskDelete }) {
+function Task({ task, onDelete }) {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleCheckPress = () => {
@@ -14,13 +12,13 @@ function Task({ task, onTaskDelete }) {
     };
 
     const handleDeleteClick = () => {   
-        onTaskDelete(task._id);
+        onDelete(task._id);
     }
 
     return (
         <View style={styles.taskContainer}>
             <TaskCheck isChecked={isChecked} onPress={handleCheckPress} />
-            <Text style={styles.taskText}>{task}</Text>
+            <Text style={styles.taskText}>{task.title}</Text>
             <View style={styles.buttonGroup}>
                 <ButtonTask title="Edit" color="#4CAF50" />
                 <ButtonTask title="Delete" onPress={handleDeleteClick} color="#f44336" />

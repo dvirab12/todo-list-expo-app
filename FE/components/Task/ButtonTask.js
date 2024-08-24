@@ -1,15 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-function ButtonTask({ title, color = '#000000' }) {
-    const handlePress = () => {
-        console.log(`${title} button pressed`);
-    };
-
+function ButtonTask({ title, color = '#000000', onPress }) {
     return (
         <TouchableOpacity
             style={[styles.button, { backgroundColor: color }]}
-            onPress={handlePress}
+            onPress={onPress}
             activeOpacity={0.8}
         >
             <Text style={styles.buttonText}>{title}</Text>
