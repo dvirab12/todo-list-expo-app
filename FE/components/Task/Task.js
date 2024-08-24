@@ -1,40 +1,52 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 import TaskCheck from './TaskCheck';
 import ButtonTask from './ButtonTask';
-function Task({task}){
+
+function Task({ task }) {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckPress = () => {
+        setIsChecked(!isChecked);
+    };
+
     return (
         <View style={styles.taskContainer}>
-            <TaskCheck isChecked={true} />
-            <Text style={[styles.taskText, styles.taskTitleText]}>
-              {task}
-            </Text>
-            <ButtonTask title='hi'/>
+            <TaskCheck isChecked={isChecked} onPress={handleCheckPress} />
+            <Text style={styles.taskText}>{task}</Text>
+            <View style={styles.buttonGroup}>
+                <ButtonTask title="Edit" color="#4CAF50" />
+                <ButtonTask title="Delete" color="#f44336" />
+            </View>
         </View>
     );
 }
-  
 
 const styles = StyleSheet.create({
-  taskContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: '#a2d15c',
-    borderColor: '#dbe7b5',
-    borderWidth: 6,
-    marginHorizontal: 10
-  },
-  taskText: {
-    fontSize: 18,
-    marginLeft: 20,
-    flex: 1
-  },
-  taskTitleText: {
-    fontWeight: 'bold'
-  }
+    taskContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#a2d15c',
+        borderColor: '#dbe7b5',
+        borderWidth: 6,
+        borderRadius: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginHorizontal: 10,
+        marginVertical: 5,
+    },
+    taskText: {
+        flex: 1,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        marginHorizontal: 10,
+        flexWrap: 'wrap',
+    },
+    buttonGroup: {
+        flexDirection: 'row',
+    },
 });
 
 export default Task;
