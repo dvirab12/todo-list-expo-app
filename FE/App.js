@@ -29,6 +29,15 @@ export default function App() {
       console.error(`Failed to delete task ${taskId}`, err)
     }
   } 
+
+  const handleTaskAdd = async(task) => {
+    try {
+      const newTask = await getTasks(task);
+      setTasks([...tasks, newTask]);
+    } catch (err) {
+      console.error(`Failed to add task ${task}`, err)
+    }
+  }
   
   return (
     <SafeAreaView style={styles.container}>
@@ -40,7 +49,7 @@ export default function App() {
         <Task task={task} key={task._id} onDelete={handleTaskDelete} />
       ))} 
       </ScrollView>
-      <NewTaskButton />
+      <NewTaskButton onPress={handleTaskAdd} />
     </SafeAreaView>
   );
 }
