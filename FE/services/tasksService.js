@@ -25,11 +25,11 @@ export const deleteTaskById = async(taskId) => {
     }
 }
 
-export const AddNewTask = async() => {
+export const AddNewTask = async(task) => {
     //TODO Add task component to BE as body
     try {
         const res = await axiosInstance.
-            post(`/tasks/`);
+            post(`/tasks/`, task);
         return res.data;
     } catch (err) {
         throw err;

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Modal, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 function NewTaskModal({ isModalVisible, handleAddTask, onCloseModal }) {
-    const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [newTask, setNewTask] = useState(
+        {title: "", description: ""}
+    );
 
     const onAddTask = () => {
-        handleAddTask(newTaskTitle);
-        setNewTaskTitle('');
+        handleAddTask(newTask);
+        setNewTask({title: "", description: ""});
         onCloseModal();
     }
 
@@ -18,8 +20,14 @@ function NewTaskModal({ isModalVisible, handleAddTask, onCloseModal }) {
                     <TextInput
                         style={styles.input}
                         placeholder='Task Title'
-                        value={newTaskTitle}
-                        onChangeText={setNewTaskTitle}
+                        value={newTask.title}
+                        onChangeText={setNewTask}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Task Description'
+                        value={newTask.description}
+                        onChangeText={setNewTask}
                     />
                     <View style={styles.buttonContainer}>
                         <Pressable style={[styles.button, styles.addButton]} onPress={onAddTask}>

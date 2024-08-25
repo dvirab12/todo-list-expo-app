@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import Task from './components/Task/Task';
 import NewTaskButton from './components/NewTask/NewTaskButton';
-import { deleteTaskById, getAllTasks, getTasks } from './services/tasksService';
+import { AddNewTask, deleteTaskById, getAllTasks, getTasks } from './services/tasksService';
 import NewTaskModal from './components/NewTask/NewTaskModal';
 
 export default function App() {
@@ -42,9 +42,9 @@ export default function App() {
     }
   } 
 
-  const handleTaskAdd = async(task) => {
+  const handleAddTask = async(task) => {
     try {
-      const newTask = await getTasks(task);
+      const newTask = await AddNewTask(task);
       setTasks([...tasks, newTask]);
     } catch (err) {
       console.error(`Failed to add task ${task}`, err)
@@ -64,7 +64,7 @@ export default function App() {
       <NewTaskButton onPress={newTaskModalOpen} />
       <NewTaskModal 
         isModalVisible={isModalVisibile}
-         handleAddTask={handleTaskAdd} 
+         handleAddTask={handleAddTask} 
          onCloseModal={onNewTaskModalOClose} />
     </SafeAreaView>
   );
