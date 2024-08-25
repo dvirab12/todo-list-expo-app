@@ -4,9 +4,11 @@ import { View, StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import Task from './components/Task/Task';
 import NewTaskButton from './components/NewTask/NewTaskButton';
 import { deleteTaskById, getAllTasks, getTasks } from './services/tasksService';
+import NewTaskModal from './components/NewTask/NewTaskModal';
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
+  const [isModalVisibile, setIsModalVisibile] = useState(false);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -20,6 +22,16 @@ export default function App() {
     }
     loadTasks();
   }, [])
+
+  const newTaskModalOpen = () => {
+    setIsModalVisibile(true);
+    console.log('opened new task modal')
+  }
+
+  const onNewTaskModalOClose = () => {
+    setIsModalVisibile(false);
+    console.log('closed new task modal')
+  }
   
   const handleTaskDelete = async(taskId) => {
     try {
@@ -49,7 +61,11 @@ export default function App() {
         <Task task={task} key={task._id} onDelete={handleTaskDelete} />
       ))} 
       </ScrollView>
-      <NewTaskButton onPress={handleTaskAdd} />
+      <NewTaskButton onPress={newTaskModalOpen} />
+      <NewTaskModal 
+        isModalVisible={isModalVisibile}
+         handleAddTask={handleTaskAdd} 
+         onCloseModal={onNewTaskModalOClose} />
     </SafeAreaView>
   );
 }

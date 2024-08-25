@@ -1,7 +1,7 @@
 import React from "react"
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 
-function NewTaskButton(onPress){
+function NewTaskButton({ onPress }){
     return(
         <View>
             <TouchableOpacity style={[styles.Button, styles.BoxShadow]} onPress={onPress}>

@@ -26,6 +26,7 @@ export const deleteTaskById = async(taskId) => {
 }
 
 export const AddNewTask = async() => {
+    //TODO Add task component to BE as body
     try {
         const res = await axiosInstance.
             post(`/tasks/`);

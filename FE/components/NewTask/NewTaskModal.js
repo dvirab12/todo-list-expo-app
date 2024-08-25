@@ -1,40 +1,34 @@
-import { useState } from 'react';
-import { View, Modal, TextInput, Pressable } from 'react-native'
+import React, { useState } from 'react';
+import { View, Modal, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
-const NewTaskModal = ( isModalVisible, handleAddTask, onCloseModal) => {
+function NewTaskModal({ isModalVisible, handleAddTask, onCloseModal }) {
     const [newTaskTitle, setNewTaskTitle] = useState('');
 
     const onAddTask = () => {
         handleAddTask(newTaskTitle);
         setNewTaskTitle('');
+        onCloseModal();
     }
 
     return (
-        <Modal
-            animationType='slide'
-            visible={isModalVisible}>
-            <View style={styles.centeredView}>
-                <Text style={styles.TitleContainer}>Add new task</Text>
-                <TextInput
-                    placeholder='Task Title'
-                    value={newTaskTitle}
-                    onChangeText={setNewTaskTitle}
-                ></TextInput>
-                <View style={styles.buttonContainer}>
-                    <Pressable
-                        title={'Add Task'}
-                        style={styles.button}
-                        onPress={onAddTask}
-                    >
-                        <Text style={styles.buttonText}>Add Task</Text>
-                    </Pressable>
-                    <Pressable
-                        title={'Cancel'}
-                        style={styles.button}
-                        onPress={onCloseModal}
-                    >
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </Pressable>
+        <Modal animationType='slide' transparent={true} visible={isModalVisible}>
+            <View style={styles.modalOverlay}>
+                <View style={styles.modalContainer}>
+                    <Text style={styles.titleText}>Add New Task</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Task Title'
+                        value={newTaskTitle}
+                        onChangeText={setNewTaskTitle}
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Pressable style={[styles.button, styles.addButton]} onPress={onAddTask}>
+                            <Text style={styles.buttonText}>Add Task</Text>
+                        </Pressable>
+                        <Pressable style={[styles.button, styles.cancelButton]} onPress={onCloseModal}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </Pressable>
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -42,36 +36,55 @@ const NewTaskModal = ( isModalVisible, handleAddTask, onCloseModal) => {
 }
 
 const styles = StyleSheet.create({
-    centeredView: {
+    modalOverlay: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    },
+    modalContainer: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        elevation: 10,
+    },
+    titleText: {
+        fontWeight: 'bold',
+        fontSize: 24,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 20,
+        fontSize: 16,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 10,
     },
     button: {
-        backgroundColor: '#1E90FF',
-        borderRadius: 10,
-        padding: 10,
+        flex: 1,
+        paddingVertical: 10,
+        borderRadius: 5,
         marginHorizontal: 5,
+    },
+    addButton: {
+        backgroundColor: '#1E90FF',
+    },
+    cancelButton: {
+        backgroundColor: '#FF6347',
     },
     buttonText: {
         color: '#FFF',
         fontSize: 16,
+        textAlign: 'center',
         fontWeight: 'bold',
     },
-    TitleContainer: {
-        justifyContent: "center", 
-        alignItems: "center",
-        fontWeight: 'bold',
-        fontSize: 30,
-
-    }
-})
+});
 
 export default NewTaskModal;
