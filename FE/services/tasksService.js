@@ -25,21 +25,20 @@ export const deleteTaskById = async(taskId) => {
     }
 }
 
-export const AddNewTask = async(task) => {
-    //TODO Add task component to BE as body
+export const addNewTask = async(task) => {
     try {
-        const res = await axiosInstance.
-            post(`/tasks/`, task);
+        const res = await axios.
+            post(`http://172.20.10.2:3000/tasks/`, task);
         return res.data;
     } catch (err) {
         throw err;
     }
 }
 
-export const editTaskById = async(taskId) => {
+export const updateTaskById = async(taskId, task) => {
     try {
         const res = await axiosInstance.
-            post(`/tasks/${taskId}`);
+            post(`/tasks/${taskId}`, task);
         return res.data;
     } catch (err) {
         throw err;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Modal, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
-function NewTaskModal({ isModalVisible, handleAddTask, onCloseModal }) {
+function TaskModal({ isModalVisible, handleAddTask, onCloseModal, isEditing, taskToEdit }) {
     const [newTask, setNewTask] = useState(
         {title: "", description: ""}
     );
@@ -16,18 +16,18 @@ function NewTaskModal({ isModalVisible, handleAddTask, onCloseModal }) {
         <Modal animationType='slide' transparent={true} visible={isModalVisible}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
-                    <Text style={styles.titleText}>Add New Task</Text>
+                    <Text style={styles.titleText}>{isEditing ? 'Edit Task' : 'Add New Task'}</Text>
                     <TextInput
                         style={styles.input}
                         placeholder='Task Title'
                         value={newTask.title}
-                        onChangeText={setNewTask}
+                        onChangeText={(text) => setNewTask({ ...newTask, title: text })}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder='Task Description'
                         value={newTask.description}
-                        onChangeText={setNewTask}
+                        onChangeText={(text) => setNewTask({ ...newTask, description: text })}
                     />
                     <View style={styles.buttonContainer}>
                         <Pressable style={[styles.button, styles.addButton]} onPress={onAddTask}>
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NewTaskModal;
+export default TaskModal;

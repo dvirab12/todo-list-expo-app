@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
         const newTask = await task.save();
         res.status(201).json(newTask);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(401).json({ message: err.message });
     }
 });
 

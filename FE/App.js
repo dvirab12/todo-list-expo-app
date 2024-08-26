@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import Task from './components/Task/Task';
 import NewTaskButton from './components/NewTask/NewTaskButton';
-import { AddNewTask, deleteTaskById, getAllTasks, getTasks } from './services/tasksService';
-import NewTaskModal from './components/NewTask/NewTaskModal';
+import { addNewTask, deleteTaskById, getAllTasks, updateTaskById } from './services/tasksService';
+import TaskModal from './components/NewTask/TaskModal';
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [isModalVisibile, setIsModalVisibile] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -23,12 +25,12 @@ export default function App() {
     loadTasks();
   }, [])
 
-  const newTaskModalOpen = () => {
+  const TaskModalOpen = () => {
     setIsModalVisibile(true);
     console.log('opened new task modal')
   }
 
-  const onNewTaskModalOClose = () => {
+  const onTaskModalOClose = () => {
     setIsModalVisibile(false);
     console.log('closed new task modal')
   }
@@ -44,13 +46,26 @@ export default function App() {
 
   const handleAddTask = async(task) => {
     try {
-      const newTask = await AddNewTask(task);
-      setTasks([...tasks, newTask]);
+      if  (isEditing) {
+        const updatedTask = await updateTaskById(newTask._id, task);
+        setTasks((prevTasks) => 
+          prevTasks.map((t) => (t._id === task._id ? updatedTask : t))
+        );
+      } else {
+        const newTask = await addNewTask(task);
+        setTasks([...tasks, newTask]);
+      }
+      TaskModalOpen()
     } catch (err) {
-      console.error(`Failed to add task ${task}`, err)
+      console.error(`Failed to save task ${task}`, err)
     }
   }
   
+  const handleTaskEdit = (task) => {
+    setTaskToEdit(task);
+    setIsEditing(true);
+    TaskModalOpen();
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -58,14 +73,16 @@ export default function App() {
       </View>
      <ScrollView>
       {tasks.map(task => (
-        <Task task={task} key={task._id} onDelete={handleTaskDelete} />
+        <Task task={task} key={task._id} onDelete={handleTaskDelete} onEdit={handleTaskEdit} />
       ))} 
       </ScrollView>
-      <NewTaskButton onPress={newTaskModalOpen} />
-      <NewTaskModal 
+      <NewTaskButton onPress={TaskModalOpen} />
+      <TaskModal 
         isModalVisible={isModalVisibile}
-         handleAddTask={handleAddTask} 
-         onCloseModal={onNewTaskModalOClose} />
+        handleAddTask={handleAddTask} 
+        onCloseModal={onTaskModalOClose}
+        isEditing={isEditing}
+        taskToEdit={taskToEdit} />
     </SafeAreaView>
   );
 }
