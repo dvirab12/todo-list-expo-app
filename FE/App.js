@@ -27,10 +27,12 @@ export default function App() {
 
   const TaskModalOpen = () => {
     setIsModalVisibile(true);
-    console.log('opened new task modal')
+    console.log('opened new task modal');
   }
 
-  const onTaskModalOClose = () => {
+  const taskModalClose = () => {
+    setIsEditing(false);
+    setTaskToEdit(null);
     setIsModalVisibile(false);
     console.log('closed new task modal')
   }
@@ -59,13 +61,15 @@ export default function App() {
     } catch (err) {
       console.error(`Failed to save task ${task}`, err)
     }
+    taskModalClose();
   }
   
-  const handleTaskEdit = (task) => {
+  const handleEditClick = (task) => {
     setTaskToEdit(task);
     setIsEditing(true);
     TaskModalOpen();
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -73,14 +77,14 @@ export default function App() {
       </View>
      <ScrollView>
       {tasks.map(task => (
-        <Task task={task} key={task._id} onDelete={handleTaskDelete} onEdit={handleTaskEdit} />
+        <Task task={task} key={task._id} onDelete={handleTaskDelete} onEdit={() => handleEditClick(task)} />
       ))} 
       </ScrollView>
-      <NewTaskButton onPress={TaskModalOpen} />
+      <NewTaskButton onPress={() => setIsModalVisibile(true)} />
       <TaskModal 
         isModalVisible={isModalVisibile}
         handleAddTask={handleAddTask} 
-        onCloseModal={onTaskModalOClose}
+        onCloseModal={taskModalClose}
         isEditing={isEditing}
         taskToEdit={taskToEdit} />
     </SafeAreaView>

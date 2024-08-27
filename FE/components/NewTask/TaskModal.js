@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Modal, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 function TaskModal({ isModalVisible, handleAddTask, onCloseModal, isEditing, taskToEdit }) {
-    const [newTask, setNewTask] = useState(
+    const [task, setTask] = useState(
         {title: "", description: ""}
     );
+    
+    useEffect(() => {
+        if (isEditing && taskToEdit) {
+            setTask(taskToEdit);
+        }
+    }, [isEditing, taskToEdit]);
+    
 
     const onAddTask = () => {
-        handleAddTask(newTask);
-        setNewTask({title: "", description: ""});
+        handleAddTask(task);
+        setTask({title: "", description: ""});
+        onCloseModal();
+    }
+
+    const onClose = () => {
+        setTask({title: "", description: ""});
         onCloseModal();
     }
 
@@ -20,20 +32,20 @@ function TaskModal({ isModalVisible, handleAddTask, onCloseModal, isEditing, tas
                     <TextInput
                         style={styles.input}
                         placeholder='Task Title'
-                        value={newTask.title}
-                        onChangeText={(text) => setNewTask({ ...newTask, title: text })}
+                        value={task.title}
+                        onChangeText={(text) => setTask({ ...task, title: text })}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder='Task Description'
-                        value={newTask.description}
-                        onChangeText={(text) => setNewTask({ ...newTask, description: text })}
+                        value={task.description}
+                        onChangeText={(text) => setTask({ ...task, description: text })}
                     />
                     <View style={styles.buttonContainer}>
                         <Pressable style={[styles.button, styles.addButton]} onPress={onAddTask}>
-                            <Text style={styles.buttonText}>Add Task</Text>
+                            <Text style={styles.buttonText}>{isEditing ? 'Save Changes' : 'Add Task'}</Text>
                         </Pressable>
-                        <Pressable style={[styles.button, styles.cancelButton]} onPress={onCloseModal}>
+                        <Pressable style={[styles.button, styles.cancelButton]} onPress={onClose}>
                             <Text style={styles.buttonText}>Cancel</Text>
                         </Pressable>
                     </View>
