@@ -2,30 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { View, Modal, TextInput, Pressable, StyleSheet, Text } from 'react-native';
 
 function TaskModal({ isModalVisible, handleAddTask, onCloseModal, isEditing, taskToEdit }) {
-    const [task, setTask] = useState(
-        {title: "", description: ""}
-    );
-    
+    const [task, setTask] = useState({ title: "", description: "" });
+
     useEffect(() => {
         if (isEditing && taskToEdit) {
             setTask(taskToEdit);
+        } else {
+            // Reset task when not editing
+            setTask({ title: "", description: "" });
         }
-    }, [isEditing, taskToEdit]);
-    
+    }, [isEditing, taskToEdit, isModalVisible]); // Added `isModalVisible` as a dependency
 
     const onAddTask = () => {
         handleAddTask(task);
-        setTask({title: "", description: ""});
-        onCloseModal();
-    }
+    };
 
     const onClose = () => {
-        setTask({title: "", description: ""});
         onCloseModal();
-    }
+    };
 
     return (
-        <Modal animationType='slide' transparent={true} visible={isModalVisible}>
+        <Modal animationType='slide' transparent={true} visible={isModalVisible} onRequestClose={onClose}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <Text style={styles.titleText}>{isEditing ? 'Edit Task' : 'Add New Task'}</Text>

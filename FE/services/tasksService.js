@@ -2,10 +2,6 @@ import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 
 
-export const getTasks = async () => {
-    const Tasks = await axios.get('http://172.20.10.2:3000/tasks');
-    return Tasks.data
-}
 export const getAllTasks = async() => {
     try {
         const res = await axiosInstance.get('/tasks');
@@ -27,8 +23,8 @@ export const deleteTaskById = async(taskId) => {
 
 export const addNewTask = async(task) => {
     try {
-        const res = await axios.
-            post(`http://172.20.10.2:3000/tasks/`, task);
+        const res = await axiosInstance.
+            post(`tasks`, task);
         return res.data;
     } catch (err) {
         throw err;
