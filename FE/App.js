@@ -7,6 +7,7 @@ import { addNewTask, deleteTaskById, getAllTasks, updateTaskById } from './servi
 import TaskModal from './components/NewTask/TaskModal';
 
 export default function App() {
+  //TODO use react-navigation and create a navigation stack
   const [tasks, setTasks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
