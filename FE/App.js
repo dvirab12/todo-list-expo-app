@@ -72,6 +72,19 @@ export default function App() {
     taskModalOpen();
   }
 
+  const handleToggleCheck = async (task) => {
+    console.log('Before toggling:', task);
+    const toggledTask = { ...task, isCompleted: !task.isCompleted };
+    try {
+      await updateTaskById(task._id, toggledTask);
+      console.log('After toggling:', toggledTask);
+      setTasks((prevTasks) =>
+        prevTasks.map((t) => (t._id === task._id ? toggledTask : t)));
+    } catch (err) {
+      console.error(`Failed to toggle task ${task._id}`, err);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -79,7 +92,12 @@ export default function App() {
       </View>
       <ScrollView>
         {tasks.map(task => (
-          <Task task={task} key={task._id} onDelete={handleTaskDelete} onEdit={() => handleEditClick(task)} />
+          <Task 
+            task={task} 
+            key={task._id} 
+            onDelete={handleTaskDelete} 
+            onEdit={() => handleEditClick(task)} 
+            onToggleCheck={() => handleToggleCheck(task)}/>
         ))}
       </ScrollView>
       <NewTaskButton onPress={taskModalOpen} />

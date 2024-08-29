@@ -4,10 +4,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import TaskCheck from './TaskCheck';
 import ButtonTask from './ButtonTask';
 
-function Task({ task, onDelete, onEdit }) {
+function Task({ task, onDelete, onEdit, onToggleCheck }) {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleCheckPress = () => {
+        onToggleCheck(task);
         setIsChecked(!isChecked);
     };
 
