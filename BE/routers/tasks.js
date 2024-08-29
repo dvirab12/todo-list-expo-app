@@ -2,10 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
 
+//auth mmiddleware
+const authenticate = (req, res, next) => {
+    const token = req.headers['Authorization'];
+
+    if(!token) return res.status(401).send("Access denied. No token provided.");
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(403).send('Invalid token');
+        req.userId = decoded.id;
+        next();
+    });
+}
+
 // Get all tasks
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
     try {
-        const tasks = await Task.find();
+        const tasks = await Task.find({ userId: req.userId });
         console.log(tasks);
         res.json(tasks);
     } catch (err) {
@@ -13,31 +25,14 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get a task by ID
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const task = await Task.findById(id);
-        if (!task) {
-            return res.status(404).json({ message: "Task not found" });
-        }
-        res.status(200).json(task);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
 // Update a task by ID
-router.post('/:id', async (req, res) => {
+router.post('/:id', authenticate, async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
     try {
-        const updatedTask = await Task.findByIdAndUpdate(id, updates, {
-            new: true,
-            runValidators: true
-        });
+        const updatedTask = await Task.findOneAndUpdate(
+            { _id: id, userId: req.userId }, req.body, { new: true });;
 
         if (!updatedTask) {
             return res.status(404).json({ message: "Task not found" });
@@ -53,7 +48,7 @@ router.post('/:id', async (req, res) => {
 });
 
 // Create a new task
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
     const { title, description } = req.body;
 
     if (!title) {
@@ -61,24 +56,25 @@ router.post('/', async (req, res) => {
     }
 
     const task = new Task({
+        userId: req.userId,
         title: title,
         description: description || ""
     });
 
     try {
-        const newTask = await task.save();
-        res.status(201).json(newTask);
+        await task.save();
+        res.status(201).json(task);
     } catch (err) {
         res.status(401).json({ message: err.message });
     }
 });
 
 // Delete a task by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedTask = await Task.findByIdAndDelete(id);
+        const deletedTask = await Task.findOneAndUpdate({ _id: id, userId: req.userId });
 
         if (!deletedTask) {
             return res.status(404).json({ message: "Task not found" });
