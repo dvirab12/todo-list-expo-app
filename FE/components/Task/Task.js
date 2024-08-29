@@ -5,7 +5,7 @@ import TaskCheck from './TaskCheck';
 import ButtonTask from './ButtonTask';
 
 function Task({ task, onDelete, onEdit, onToggleCheck }) {
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(task.isCompleted);
 
     const handleCheckPress = () => {
         onToggleCheck(task);
