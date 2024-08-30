@@ -1,19 +1,20 @@
-import mongoose from "mongoose";
-import bycrypt from "bcrypt";
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-const mongoose = include(mongoose)
-const bycrypt = include(bycrypt)
-
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: { type: String, required: true, trim: true, unique: true },
     password: { type: String, required: true, trim: true },
 });
 
 userSchema.pre("save", async function (next) {
-    if (this.isModified("password")) return next();
-    this.password = await bycrypt.hash(this.password, 10);
-    next();
-});
+    if (!this.isModified("password")) return next();
 
+    try {
+        this.password = await bcrypt.hash(this.password, 10);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
 module.exports = mongoose.model("User", userSchema);

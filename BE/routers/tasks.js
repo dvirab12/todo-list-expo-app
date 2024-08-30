@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const jwt = require('jsonwebtoken');
+
 
 //auth mmiddleware
 const authenticate = (req, res, next) => {
@@ -74,7 +76,7 @@ router.delete('/:id', authenticate, async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedTask = await Task.findOneAndUpdate({ _id: id, userId: req.userId });
+        const deletedTask = await Task.findOneAndDelete({ _id: id, userId: req.userId });
 
         if (!deletedTask) {
             return res.status(404).json({ message: "Task not found" });

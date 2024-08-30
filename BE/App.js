@@ -1,50 +1,27 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
 
 const app = express();
-const port = 3000;  
+const port = 3000;
 
-const tasksRouter = require("./routers/Tasks")
+const tasksRouter = require('./routers/tasks');
+const usersRouter = require('./routers/users');
 
-app.use(express.json());
-app.use('/tasks', tasksRouter);
 app.use(cors());
+app.use(express.json());
+app.use('/api/tasks', tasksRouter);
+app.use('/api/users', usersRouter);
 
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb://localhost:27017/todoDB";
+const mongoDB = process.env.MONGODB_URI || "mongodb://localhost:27017/todoDB";
 
 mongoose.connect(mongoDB)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
-const users = [{username: "admin", password: "admin"}]
-
-const checkUserExists = (req, res, next) => {
-    const {username} = req.body;
-    const user = users.find(u => u.username === username); 
-
-    if (user) {
-            return res.status(401).send("This account is already in the system");
-    }
-    next();
-} 
-
-app.post('/login', checkUserExists, (req, res) => {
-    res.status(200).send('Welcome to the protected route!');
-});
-
-app.post('/register', checkUserExists, (req, res) => {
-    const {username, password} = req.body;
-
-    users.push({username, password})
-    return res.status(201).send("Added User!");
-});
-
-app.get('/users', (req, res) => {
-    res.send(users);
-});
-
 app.listen(port, () => {
-console.log(`Example app listening on port ${port}`)
+    console.log(`Server running on port ${port}`);
 });
