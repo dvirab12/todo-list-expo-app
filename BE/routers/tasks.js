@@ -20,7 +20,7 @@ const authenticate = (req, res, next) => {
         if (err) {
             return res.status(403).send('Invalid token');
         }
-        req.userId = decoded.id;
+        req.userId = decoded._id || decoded.id;
         next();
     });
 };
@@ -66,8 +66,10 @@ router.post('/', authenticate, async (req, res) => {
         return res.status(400).send("ERROR: Title is required!");
     }
 
+    const userId = req.userId;
+
     const task = new Task({
-        userId: req.userId,
+        userId: userId,
         title: title,
         description: description || ""
     });

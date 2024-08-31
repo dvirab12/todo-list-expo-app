@@ -1,40 +1,45 @@
-import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 
 
-export const getAllTasks = async() => {
+export const getAllTasks = async(userId) => {
     try {
-        const res = await axiosInstance.get('/tasks');
+        const res = await axiosInstance.get('/tasks',{
+            headers: { 'Authorization': `Bearer ${userId}` }
+        });
         return res.data;
     } catch (err) {
         throw err;
     }
 }
 
-export const deleteTaskById = async(taskId) => {
+export const deleteTaskById = async(userId, taskId) => {
     try {
-        const res = await axiosInstance.
-            delete(`/tasks/${taskId}`);
+        const res = await axiosInstance.delete(`/tasks/${taskId}`, {
+            headers: { 'Authorization': `Bearer ${userId}` }
+        });
         return res.data;
     } catch (err) {
         throw err;
     }
 }
 
-export const addNewTask = async(task) => {
+export const addNewTask = async(userId ,task) => {
     try {
-        const res = await axiosInstance.
-            post(`tasks`, task);
+        const res = await axiosInstance.post(`tasks`, task, {
+            headers: { 'Authorization': `Bearer ${userId}` }
+        });
         return res.data;
     } catch (err) {
+        console.error('Error adding new task:', err);
         throw err;
     }
 }
 
-export const updateTaskById = async(taskId, task) => {
+export const updateTaskById = async(userId, task) => {
     try {
-        const res = await axiosInstance.
-            post(`/tasks/${taskId}`, task);
+        const res = await axiosInstance.post(`/tasks/${task._id}`, task, {
+            headers: { 'Authorization': `Bearer ${userId}` }
+        });
         return res.data;
     } catch (err) {
         throw err;
